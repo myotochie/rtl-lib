@@ -1,6 +1,6 @@
 # rtl-lib
 
-![ci](https://github.com/<your-github-user>/rtl-lib/actions/workflows/ci.yml/badge.svg)
+![ci](https://github.com/myotochie/rtl-lib/actions/workflows/ci.yml/badge.svg)
 
 A library of verified, parameterizable, versioned RTL IP blocks written in VHDL-2008 and SystemVerilog.
 
@@ -54,7 +54,7 @@ See [docs/CONVENTIONS.md](docs/CONVENTIONS.md).
 
 ## License
 
-To be confirmed.
+Apache License 2.0. See [LICENSE](LICENSE).
 
 ## Contributing
 
