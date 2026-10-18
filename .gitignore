@@ -1,0 +1,28 @@
+# Simulation outputs
+*.vcd
+*.ghw
+*.fst
+*.wdb
+work-obj*.cf
+obj_dir/
+xsim.dir/
+*.pb
+
+# Vivado
+.Xil/
+vivado*.jou
+vivado*.log
+vivado*.str
+*.backup.jou
+*.backup.log
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Editors and OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
