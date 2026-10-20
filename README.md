@@ -11,7 +11,7 @@ Nothing is merged without a written spec, a passing testbench and a results fold
 
 | IP | Spec | RTL | Verification | Results | Version |
 |---|---|---|---|---|---|
-| `sync_fifo` | draft | - | - | - | - |
+| `sync_fifo` | v0.1 | - | - | - | - |
 
 Current release: `v0.1.0` (conventions and repository skeleton only, no RTL yet).
 
