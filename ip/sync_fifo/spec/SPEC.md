@@ -131,6 +131,11 @@ the level is their difference. No counter is needed, and all `DEPTH` words are u
 Configurations simulated: (`WIDTH`, `DEPTH`) = (1, 2), (8, 16), (32, 1024).
 Coverage numbers and the regression command go in `results/`.
 
+**Implementation status (VHDL):** scoreboard, protocol assertions, coverage items and reset checks
+are implemented in `tb/sync_fifo_tb.vhd` and run in the three configurations above
+(`python scripts/run_sim.py sync_fifo`, results in `results/sim_summary.txt`).
+Not done yet: SystemVerilog version, formal proofs, and the synthesis metrics of section 8.
+
 ## 10. Limits
 
 - Single clock domain. Crossing clock domains needs the asynchronous FIFO, a separate IP.

@@ -1,0 +1,36 @@
+sync_fifo: simulation summary
+
+Command: python scripts/run_sim.py sync_fifo
+
+WIDTH=1 DEPTH=2: PASS
+    coverage: all levels 0 to 2 reached: yes
+    coverage: write offered while full:        6181
+    coverage: rd_ready high while empty:       5419
+    coverage: read and write on same edge:     7695
+    coverage: read while write refused (full): 1256
+    coverage: stall of 3 or more cycles:       548
+    coverage: reset with words stored:         2
+    coverage: pointer wrap-around:             yes
+    transfers: written=10488 read=10483
+
+WIDTH=8 DEPTH=16: PASS
+    coverage: all levels 0 to 16 reached: yes
+    coverage: write offered while full:        5099
+    coverage: rd_ready high while empty:       4855
+    coverage: read and write on same edge:     8291
+    coverage: read while write refused (full): 678
+    coverage: stall of 3 or more cycles:       610
+    coverage: reset with words stored:         3
+    coverage: pointer wrap-around:             yes
+    transfers: written=11050 read=11021
+
+WIDTH=32 DEPTH=1024: PASS
+    coverage: all levels 0 to 1024 reached: yes
+    coverage: write offered while full:        2872
+    coverage: rd_ready high while empty:       3901
+    coverage: read and write on same edge:     8981
+    coverage: read while write refused (full): 269
+    coverage: stall of 3 or more cycles:       589
+    coverage: reset with words stored:         3
+    coverage: pointer wrap-around:             yes
+    transfers: written=13138 read=12079
