@@ -1,7 +1,7 @@
 # sync_fifo: specification
 
 **Status:** frozen for 0.1.0
-**Version:** 0.1.0 (target)
+**Version:** 0.2.0
 **Languages:** VHDL-2008 / SystemVerilog (same behavior in both)
 
 ## 1. Summary
@@ -106,13 +106,32 @@ the level is their difference. No counter is needed, and all `DEPTH` words are u
 
 ## 8. Target metrics
 
-| Metric | Target | Measured | Script |
+| Metric | Target | Result | How it is checked |
 |---|---|---|---|
-| Throughput | 1 word per cycle on each side while level stays between 1 and `DEPTH - 1` | - | - |
-| Write-to-read latency | 1 cycle | - | - |
-| Recovery after full | write side blocked for 1 cycle, then full rate | - | - |
-| Resources | storage array, two (`ADDR_W + 1`)-bit pointers, two comparators, no counter | - | - |
-| fmax | set after the first synthesis run, then frozen as a regression threshold | - | - |
+| Throughput | 1 word per cycle on each side while level stays between 1 and `DEPTH - 1` | met | cycle-exact checks of `wr_ready_o`, `rd_valid_o` and `level_o` in `python scripts/run_sim.py sync_fifo` |
+| Write-to-read latency | 1 cycle | met | same checks |
+| Recovery after full | write side blocked for 1 cycle, then full rate | met | same checks |
+| Resources | storage array, two (`ADDR_W + 1`)-bit pointers, two comparators, no counter | see below | `scripts/synth_vivado.tcl` |
+| fmax | no target set | see below | `scripts/synth_vivado.tcl` |
+
+Synthesis and implementation with Vivado 2023.1 on xc7z010clg400-1 (Zynq-7010), block alone
+(out-of-context), 4.0 ns clock, 0 ns input and output delays. Reproduce with
+`vivado -mode batch -nolog -nojournal -source scripts/synth_vivado.tcl -tclargs sync_fifo <WIDTH> <DEPTH>`.
+Raw lines are in `results/synth_summary.txt`.
+
+| WIDTH x DEPTH | LUT (total) | of which as memory | FF | BRAM | WNS | fmax estimate |
+|---|---|---|---|---|---|---|
+| 8 x 16 | 25 | 6 | 10 | 0 | +0.136 ns | 258.8 MHz |
+| 32 x 1024 | 910 | 704 | 47 | 0 | -1.923 ns | 168.8 MHz |
+
+The fmax estimate is 1000 / (4.0 - WNS). It is indicative, to compare future versions, not a figure
+for a full design:
+- The block is implemented without pin locations. Vivado warns that timing to and from the ports is
+  not accurate. For 32 x 1024 it also reports hold violations on port pins that it could not fix;
+  these were not analysed further.
+- The path that sets WNS was not analysed.
+- The array is read without a clock edge, so both configurations use distributed RAM (LUT as memory)
+  and no block RAM, as stated in section 10. The 32 x 1024 array (32 Kbit) would fit in one block RAM.
 
 ## 9. Verification plan
 
@@ -134,7 +153,7 @@ Coverage numbers and the regression command go in `results/`.
 **Implementation status (VHDL):** scoreboard, protocol assertions, coverage items and reset checks
 are implemented in `tb/sync_fifo_tb.vhd` and run in the three configurations above
 (`python scripts/run_sim.py sync_fifo`, results in `results/sim_summary.txt`).
-Not done yet: SystemVerilog version, formal proofs, and the synthesis metrics of section 8.
+Not done yet: SystemVerilog version and formal proofs.
 
 ## 10. Limits
 

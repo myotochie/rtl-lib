@@ -1,0 +1,15 @@
+sync_fifo: synthesis summary
+Vivado 2023.1, device xc7z010clg400-1, out-of-context, 4.0 ns clock, 0 ns input and output delays
+
+Commands (from the repository root, in cmd after settings64.bat):
+  vivado -mode batch -nolog -nojournal -source scripts/synth_vivado.tcl -tclargs sync_fifo 8 16
+  vivado -mode batch -nolog -nojournal -source scripts/synth_vivado.tcl -tclargs sync_fifo 32 1024
+
+RESULT sync_fifo_8x16: LUT=25 LUTRAM=6 FF=10 BRAM=0 WNS=0.136 ns, fmax=258.8 MHz (period 4.0 ns, part xc7z010clg400-1, Vivado 2023.1)
+RESULT sync_fifo_32x1024: LUT=910 LUTRAM=704 FF=47 BRAM=0 WNS=-1.923 ns, fmax=168.8 MHz (period 4.0 ns, part xc7z010clg400-1, Vivado 2023.1)
+
+Notes:
+- fmax estimate = 1000 / (4.0 - WNS).
+- No pin locations: Vivado warns that timing to and from the ports is not accurate.
+- The 32x1024 run also reports hold violations on port pins that Vivado could not fix. Not analysed further.
+- The path that sets WNS was not analysed.

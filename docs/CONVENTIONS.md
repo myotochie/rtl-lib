@@ -39,6 +39,7 @@ ip/<ip_name>/
 - Registered signal: `_q`. Next-state value: `_d`.
 - Constants, generics and parameters use `UPPER_CASE`: `WIDTH`, `DEPTH`.
 - Clock: `clk_i`. One clock per module unless the spec explains why.
+- A VHDL package lives in its own file whose name ends in `_pkg` (`sync_fifo_pkg.vhd`). Package files are compiled first.
 
 ## 4. Reset
 
@@ -61,7 +62,7 @@ ip/<ip_name>/
 ## 7. Style and lint
 
 - VHDL-2008 and SystemVerilog (IEEE 1800). No unintended latches.
-- VHDL: `ghdl -s --std=08` must pass. SystemVerilog: `verilator --lint-only -Wall` must pass.
+- VHDL: `ghdl -a --std=08` (full analysis) must pass. SystemVerilog: `verilator --lint-only -Wall` must pass.
 - Waivers are listed in the IP's spec with a reason.
 
 ## 8. Results

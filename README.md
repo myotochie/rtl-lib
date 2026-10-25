@@ -11,9 +11,10 @@ Nothing is merged without a written spec, a passing testbench and a results fold
 
 | IP | Spec | RTL | Verification | Results | Version |
 |---|---|---|---|---|---|
-| `sync_fifo` | v0.1 | - | - | - | - |
+| `sync_fifo` | v0.1 | VHDL | simulated, 3 configurations | `sim_summary.txt`, `synth_summary.txt` | 0.2.0 |
 
-Current release: `v0.1.0` (conventions and repository skeleton only, no RTL yet).
+Current release: `v0.2.0` (conventions, template, and `sync_fifo`: specification, VHDL RTL, testbench, simulation and synthesis results).
+Next: SystemVerilog version and formal proofs of `sync_fifo`.
 
 ## Repository layout
 
@@ -27,18 +28,20 @@ rtl-lib/
 │   └── results/   # coverage, fmax, area, power, with the script that produced them
 ├── templates/ip_template/   # copy this folder to start a new IP
 ├── docs/CONVENTIONS.md      # naming, reset, handshake, style
-├── scripts/check_structure.py
+├── scripts/                 # check_structure.py, run_sim.py, synth_vivado.tcl
 └── .github/workflows/ci.yml
 ```
 
-## Quick start (Windows)
+## Quick start (Windows, Linux, macOS)
 
-Use WSL2 with Ubuntu, then:
+Requirements: Python 3 and [GHDL](https://github.com/ghdl/ghdl/releases) in the `PATH`.
 
-```bash
-sudo apt install ghdl verilator make python3
-make check      # structure check + lint
 ```
+python scripts/check_structure.py     # folder layout check
+python scripts/run_sim.py sync_fifo   # compile and simulate (3 configurations)
+```
+
+On Linux or macOS (or WSL2), `make check` and `make sim` do the same.
 
 ## Starting a new IP
 
