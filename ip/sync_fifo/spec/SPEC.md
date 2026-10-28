@@ -2,7 +2,7 @@
 
 **Status:** frozen for 0.1.0
 **Version:** 0.2.0
-**Languages:** VHDL-2008 / SystemVerilog (same behavior in both)
+**Language:** VHDL-2008
 
 ## 1. Summary
 
@@ -153,7 +153,7 @@ Coverage numbers and the regression command go in `results/`.
 **Implementation status (VHDL):** scoreboard, protocol assertions, coverage items and reset checks
 are implemented in `tb/sync_fifo_tb.vhd` and run in the three configurations above
 (`python scripts/run_sim.py sync_fifo`, results in `results/sim_summary.txt`).
-Not done yet: SystemVerilog version and formal proofs.
+Not done yet: formal proofs.
 
 ## 10. Limits
 

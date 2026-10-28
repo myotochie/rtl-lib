@@ -2,7 +2,7 @@
 
 ![ci](https://github.com/myotochie/rtl-lib/actions/workflows/ci.yml/badge.svg)
 
-A library of verified, parameterizable, versioned RTL IP blocks written in VHDL-2008 and SystemVerilog.
+A library of verified, parameterizable, versioned RTL IP blocks written in VHDL-2008.
 
 Every IP follows the same lifecycle: **spec → architecture → RTL → verification → measured PPA → limits**.
 Nothing is merged without a written spec, a passing testbench and a results folder.
@@ -14,7 +14,7 @@ Nothing is merged without a written spec, a passing testbench and a results fold
 | `sync_fifo` | v0.1 | VHDL | simulated, 3 configurations | `sim_summary.txt`, `synth_summary.txt` | 0.2.0 |
 
 Current release: `v0.2.0` (conventions, template, and `sync_fifo`: specification, VHDL RTL, testbench, simulation and synthesis results).
-Next: SystemVerilog version and formal proofs of `sync_fifo`.
+Next: formal proofs of `sync_fifo`.
 
 ## Repository layout
 
@@ -22,7 +22,7 @@ Next: SystemVerilog version and formal proofs of `sync_fifo`.
 rtl-lib/
 ├── ip/<ip_name>/
 │   ├── spec/      # written before any RTL
-│   ├── rtl/       # synthesizable code (VHDL-2008 and/or SystemVerilog)
+│   ├── rtl/       # synthesizable VHDL-2008 code
 │   ├── tb/        # testbenches
 │   ├── formal/    # assertions and formal proofs
 │   └── results/   # coverage, fmax, area, power, with the script that produced them

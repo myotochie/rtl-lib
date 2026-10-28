@@ -61,8 +61,8 @@ ip/<ip_name>/
 
 ## 7. Style and lint
 
-- VHDL-2008 and SystemVerilog (IEEE 1800). No unintended latches.
-- VHDL: `ghdl -a --std=08` (full analysis) must pass. SystemVerilog: `verilator --lint-only -Wall` must pass.
+- VHDL-2008. No unintended latches.
+- `ghdl -a --std=08` (full analysis) must pass.
 - Waivers are listed in the IP's spec with a reason.
 
 ## 8. Results

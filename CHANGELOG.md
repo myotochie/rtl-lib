@@ -3,6 +3,11 @@
 All notable changes to this repository are listed here. The format follows
 [Keep a Changelog](https://keepachangelog.com/) and the project uses SemVer.
 
+## [Unreleased]
+
+### Changed
+- The library is VHDL only: SystemVerilog references removed from the docs, Makefile and CI.
+
 ## [0.2.0] - 2026-10-25
 
 ### Added

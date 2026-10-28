@@ -2,7 +2,7 @@
 
 **Status:** draft
 **Version:** 0.0.0
-**Languages:** VHDL-2008 / SystemVerilog
+**Language:** VHDL-2008
 
 ## 1. Summary
 
