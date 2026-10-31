@@ -34,3 +34,8 @@ WIDTH=32 DEPTH=1024: PASS
     coverage: reset with words stored:         3
     coverage: pointer wrap-around:             yes
     transfers: written=13138 read=12079
+
+Illegal parameters (the run must fail with the expected message):
+  DEPTH=6: REJECTED
+  DEPTH=8192: REJECTED
+  WIDTH=2000: REJECTED

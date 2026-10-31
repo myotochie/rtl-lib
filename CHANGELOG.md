@@ -4,7 +4,9 @@ All notable changes to this repository are listed here. The format follows
 [Keep a Changelog](https://keepachangelog.com/) and the project uses SemVer.
 
 ## [Unreleased]
-
+### Added
+- `async_fifo`: dual-clock FIFO with Gray-coded pointers (spec, VHDL RTL, two-clock testbench).
+- `run_sim.py` accepts any generics and checks that illegal parameters are rejected.
 ### Changed
 - The library is VHDL only: SystemVerilog references removed from the docs, Makefile and CI.
 

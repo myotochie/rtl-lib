@@ -1,0 +1,16 @@
+async_fifo: mutation check
+
+Command: python scripts/mutation_check.py async_fifo
+
+M1 binary pointer crosses (no Gray): CAUGHT: wr_gray crossing bus changed by more than one bit
+M2 read synchronizer bypassed: CAUGHT: latency out of range: 2 read edges
+M3 full one word early: CAUGHT: coverage: no write offered while full
+M4 empty from the unsynchronized pointer: CAUGHT: latency out of range: 1 read edges
+M5 extra pointer bit ignored in full: CAUGHT: latency: the word never became readable
+M6 read pointer not reset: CAUGHT: rd_valid_o or rd_data_o changed while the word was not read
+M7 levels swapped: CAUGHT: wr_level_o below the true occupancy: level=0 true=1
+M8 data written one slot late: CAUGHT: data mismatch on word 0
+M9 write synchronizer bypassed: CAUGHT: coverage: wr_level_o never above the true occupancy
+M10 write pointer not reset: CAUGHT: rd_level_o above the true occupancy: level=12 true=8
+
+10 of 10 mutants caught

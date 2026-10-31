@@ -12,7 +12,7 @@ Nothing is merged without a written spec, a passing testbench and a results fold
 | IP | Spec | RTL | Verification | Results | Version |
 |---|---|---|---|---|---|
 | `sync_fifo` | v0.1 | VHDL | simulated, 3 configurations | `sim_summary.txt`, `synth_summary.txt` | 0.2.0 |
-
+| `async_fifo` | v0.3 | VHDL | simulated, 24 clock/phase configurations | `sim_summary.txt` | in progress |
 Current release: `v0.2.0` (conventions, template, and `sync_fifo`: specification, VHDL RTL, testbench, simulation and synthesis results).
 Next: formal proofs of `sync_fifo`.
 

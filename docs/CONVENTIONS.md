@@ -75,3 +75,26 @@ A number without a reproduction command is not accepted.
 - The repository uses SemVer. Releases are tagged `vMAJOR.MINOR.PATCH`.
 - Every release has an entry in `CHANGELOG.md`.
 - The README status table is updated in the same pull request as the change it reports.
+
+
+## 10. Definition of done
+
+An IP is released only when every line below is true. A line that cannot be met is listed as an
+exception in the IP's `SPEC.md`, with a reason and a tracking issue.
+
+1. **Spec frozen before RTL.** `SPEC.md` is complete and reviewed before any file in `rtl/` exists.
+2. **Legal parameters only.** Every illegal parameter value is rejected by an elaboration assertion.
+3. **Clean analysis.** `ghdl -a --std=08` passes on all files of the IP, in CI.
+4. **Self-checking verification.** The testbench compares against a reference model (scoreboard)
+   and prints `TEST PASSED` only if no check failed. No waveform inspection is needed to judge a run.
+5. **Assertions.** Every protocol rule in the spec has an assertion in the testbench or the RTL.
+6. **Coverage that fails the test.** Each coverage item of the verification plan is counted, and
+   the test fails if one is never reached.
+7. **Mutation check.** A reproducible script injects known bugs one at a time. Every mutant must be
+   caught. The script and its result file are in the repository.
+8. **Formal proofs, or a documented exception.** The safety properties of the spec are proven, or
+   the spec says why not.
+9. **Measured results.** Area and fmax come from a script in `scripts/`. Each number in `results/`
+   has its reproduction command next to it.
+10. **Limits written down.** The spec lists what does not work and what was not verified.
+11. **Release.** CHANGELOG entry, README status table updated, CI green on `main`, tag `vX.Y.Z` pushed.
