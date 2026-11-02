@@ -4,11 +4,19 @@ All notable changes to this repository are listed here. The format follows
 [Keep a Changelog](https://keepachangelog.com/) and the project uses SemVer.
 
 ## [Unreleased]
+
+## [0.3.0] - 2026-11-02
+
 ### Added
-- `async_fifo`: dual-clock FIFO with Gray-coded pointers (spec, VHDL RTL, two-clock testbench).
-- `run_sim.py` accepts any generics and checks that illegal parameters are rejected.
+- `async_fifo`: dual-clock FIFO with Gray-coded pointers and `SYNC_STAGES` synchronizers (spec, VHDL RTL, two-clock testbench).
+- `scripts/mutation_check.py` and `make mutation`: 10 injected bugs, all caught.
+- `scripts/synth_vivado_async.tcl`: two-clock synthesis with a configurable clock period, crossing constraints, setup and hold check (TIMING=MET), ASYNC_REG check and CDC report.
+- `docs/CONVENTIONS.md` section 10: definition of done.
+- Mutation check step in the CI workflow.
+
 ### Changed
 - The library is VHDL only: SystemVerilog references removed from the docs, Makefile and CI.
+- `scripts/run_sim.py` takes any generics and checks that illegal parameters are rejected; `sync_fifo` results regenerated.
 
 ## [0.2.0] - 2026-10-25
 

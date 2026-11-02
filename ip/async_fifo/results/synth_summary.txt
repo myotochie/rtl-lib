@@ -1,0 +1,31 @@
+async_fifo: synthesis and implementation summary
+
+Command (cmd, after settings64.bat, from the repository root):
+  vivado -mode batch -nolog -nojournal -source scripts/synth_vivado_async.tcl -tclargs <WIDTH> <DEPTH> <SYNC_STAGES> <PERIOD_NS>
+
+Runs:
+  ... -tclargs 8 16 2 4.5
+  ... -tclargs 8 16 3 4.7
+  ... -tclargs 32 1024 2 6.6
+
+Setup: out-of-context, part xc7z010clg400-1, Vivado 2023.1, two clocks of the same period with
+no relation between them, I/O delays 0 ns. Crossing constraints: set_max_delay -datapath_only,
+one period between the clocks, SYNC_STAGES periods for the memory to rd_data_o paths.
+Raw reports (utilization, timing, CDC, crossing paths) are in build/vivado/<run>/.
+
+RESULT async_fifo_8x16_s2_4.5ns: TIMING=MET at 222.2 MHz (period 4.5 ns) LUT=38 LUTRAM=6 FF=38 BRAM=0 WNS_wr=0.057 ns, WNS_rd=0.298 ns, WNS_wr_to_rd=2.925 ns, WNS_rd_to_wr=2.980 ns, WHS_reg=0.104 ns, fmax_wr=225.1 MHz, fmax_rd=238.0 MHz, ASYNC_REG_FF=20 (expected 20) (part xc7z010clg400-1, Vivado 2023.1)
+RESULT async_fifo_8x16_s3_4.7ns: TIMING=MET at 212.8 MHz (period 4.7 ns) LUT=37 LUTRAM=6 FF=48 BRAM=0 WNS_wr=0.142 ns, WNS_rd=0.240 ns, WNS_wr_to_rd=3.253 ns, WNS_rd_to_wr=3.398 ns, WHS_reg=0.108 ns, fmax_wr=219.4 MHz, fmax_rd=224.2 MHz, ASYNC_REG_FF=30 (expected 30) (part xc7z010clg400-1, Vivado 2023.1)
+RESULT async_fifo_32x1024_s2_6.6ns: TIMING=MET at 151.5 MHz (period 6.6 ns) LUT=924 LUTRAM=704 FF=109 BRAM=0 WNS_wr=0.023 ns, WNS_rd=0.116 ns, WNS_wr_to_rd=4.646 ns, WNS_rd_to_wr=4.814 ns, WHS_reg=0.097 ns, fmax_wr=152.0 MHz, fmax_rd=154.2 MHz, ASYNC_REG_FF=44 (expected 44) (part xc7z010clg400-1, Vivado 2023.1)
+
+Reading the numbers:
+- TIMING=MET: setup slack is not negative in both clock domains and on both crossings. WHS_reg is
+  the worst hold slack between registers, positive in every run.
+- The frequency is the highest one tried at which timing was met. It is not a maximum: lower periods
+  were not explored.
+- The placement is not monotonic with the period. 8x16 with SYNC_STAGES=3 did not meet timing at
+  4.4 ns (WNS_rd = -0.183 ns) and met it at 4.7 ns. The failed run is not a result.
+- ASYNC_REG_FF equals the expected count in every run: the synchronizer flip-flops keep their attribute.
+- The hold slack on the ports and the HD.CLK_SRC and HD.PARTPIN_LOCS warnings come from the
+  out-of-context mode with 0 ns input delays. They are not design issues and are not reported here.
+- report_cdc: the Gray buses are recognized as synchronized with ASYNC_REG and
+  Max Delay Datapath Only. Its CDC-6 warning (multi-bit) is expected for Gray buses.

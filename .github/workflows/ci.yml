@@ -21,3 +21,6 @@ jobs:
 
       - name: Simulation
         run: make sim
+
+      - name: Mutation check
+        run: make mutation

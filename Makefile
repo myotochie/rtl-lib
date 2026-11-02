@@ -3,7 +3,7 @@
 VHDL_FILES   := $(shell find ip -path "*/rtl/*" \( -name "*.vhd" -o -name "*.vhdl" \) 2>/dev/null | sort)
 VHDL_ORDERED := $(filter %_pkg.vhd,$(VHDL_FILES)) $(filter-out %_pkg.vhd,$(VHDL_FILES))
 
-.PHONY: check structure lint sim
+.PHONY: check structure lint sim mutation
 
 check: structure lint
 
@@ -15,3 +15,7 @@ lint:
 
 sim:
 > python3 scripts/run_sim.py sync_fifo
+> python3 scripts/run_sim.py async_fifo
+
+mutation:
+> python3 scripts/mutation_check.py async_fifo

@@ -120,12 +120,25 @@ read combinationally in the read domain.
 
 | Metric | Target | Measured | Script |
 |---|---|---|---|
-| Safety | no overflow, underflow, loss or reorder, any ratio and phase | - | - |
-| Gray property | each crossing bus changes by one bit at most per source edge | - | - |
-| Latency | as in section 4 | - | - |
-| Full rate at equal clocks | `DEPTH >= 8` for `SYNC_STAGES = 2`, `DEPTH >= 16` for 3 or 4 (model) | - | - |
-| Resources | array, 2 binary pointers, 2 Gray registers, 2 synchronizers, 2 comparators | - | - |
-| fmax | per domain, set after the first synthesis run, then frozen | - | - |
+| Safety | no overflow, underflow, loss or reorder, any ratio and phase | 24 clock and phase configurations, no violation | `python scripts/run_sim.py async_fifo` |
+| Gray property | each crossing bus changes by one bit at most per source edge | assertion never fired | same |
+| Latency | `SYNC_STAGES + 1` to `SYNC_STAGES + 2` read edges | `SYNC_STAGES + 1` in zero-delay simulation | same |
+| Full rate at equal clocks | `DEPTH >= 8` for `SYNC_STAGES = 2`, `DEPTH >= 16` for 3 or 4 (pre-RTL model) | at least 0.98 word per cycle enforced in 3 configurations (`DEPTH` 16, 256, 32) | same |
+| Resources | array, 2 binary pointers, 2 Gray registers, 2 synchronizers, 2 comparators | see below | `scripts/synth_vivado_async.tcl` |
+| Timing | met in both domains and on both crossings | see below | same |
+
+Synthesis and implementation (xc7z010clg400-1, Vivado 2023.1, out-of-context):
+
+| WIDTH x DEPTH, `SYNC_STAGES` | LUT | LUTRAM | FF | BRAM | Timing met at |
+|---|---|---|---|---|---|
+| 8 x 16, 2 | 38 | 6 | 38 | 0 | 222 MHz |
+| 8 x 16, 3 | 37 | 6 | 48 | 0 | 212 MHz |
+| 32 x 1024, 2 | 924 | 704 | 109 | 0 | 151 MHz |
+
+Each frequency is the highest one tried at which setup timing was met in both domains and on both
+crossings (worst crossing slack +2.9 ns), and hold between registers was met. It is not a maximum.
+The synchronizer flip-flops carry `ASYNC_REG` in every run. Details and the reproduction command:
+`results/synth_summary.txt`.
 
 ## 9. Verification plan
 
@@ -153,7 +166,7 @@ can show logic errors such as a pointer crossing in binary, through the one-bit-
 the ratio and phase sweep. Timing safety comes from the integration rules in section 10 and from the
 synthesis constraints.
 
-Mutants run by hand during development: 10 of 10 caught (binary crossing, bypassed synchronizer, off-by-one full, unsynchronized pointer, missing reset, swapped levels, wrong write address). A reproducible script is planned. Formal proofs not done yet.
+Mutation check: python scripts/mutation_check.py async_fifo, 10 of 10 mutants caught, result in results/mutation_summary.txt.
 
 ## 10. Integration requirements
 
@@ -170,12 +183,23 @@ These rules are part of the contract. Without them the IP is not safe in hardwar
 
 ## 11. Limits
 
-- Zero-delay simulation only; no metastability model.
+- Zero-delay simulation only; no metastability model. The latency `SYNC_STAGES + 2` cannot be simulated.
+- Bit skew on the Gray buses is not checked: the synthesis script bounds the delay but applies no
+  `set_bus_skew`. To do.
 - The storage array is read without a clock edge: distributed RAM (LUTRAM) on AMD/Xilinx, not block RAM.
+  This is also what limits the frequency at large depth (timing met at 151 MHz for 32 x 1024, against
+  212 MHz or more for 8 x 16).
+- The critical paths of each domain go through the Gray to binary conversion, the subtraction
+  and the full or empty flag, all combinational. Registered flags would raise the frequency. Not done.
 - `wr_level_o` and `rd_level_o` are conservative, not exact.
 - Resets must overlap (section 4).
+- Synthesis results come from the out-of-context mode with 0 ns I/O delays; its port hold slack
+  and `HD.CLK_SRC` warnings are not design issues. The frequencies are the highest tried, not
+  maxima, and the placement is not monotonic with the period (8 x 16 with 3 stages missed
+  timing at 4.4 ns and met it at 4.7 ns).
 - No `almost_full` or `almost_empty` flags.
-- Formal proofs are planned, not done.
+- Formal proofs are not done.
+- The mutation check covers 10 mutants. It is not a proof of completeness.
 
 ## 12. References
 
