@@ -1,0 +1,25 @@
+uart: mutation check
+
+Command: python scripts/mutation_check.py uart
+
+T1 tx bit one cycle short: CAUGHT: tx: line transition not on a multiple of BIT_CLKS
+T2 tx parity bit inverted: CAUGHT: tx: wrong level for bit 9 of frame 0
+T3 tx not ready in the last cycle (gap between frames): CAUGHT: tx: transfer at cycle 205, expected 204 (ready timing)
+T4 tx stop bit sent low: CAUGHT: tx: wrong level for bit 10 of frame 0
+T5 tx ready during reset: CAUGHT: reset: outputs not idle during reset
+T6 parity polarity swapped (package): CAUGHT: loopback: error flag set on a good word
+R1 single sample instead of majority vote: CAUGHT: glitch of 1 cycles: wrong data
+R2 false start accepted: CAUGHT: glitch of 1 cycles: wrong data
+R3 sampling window a quarter bit early: CAUGHT: sample position: wrong data
+R4 parity error polarity inverted: CAUGHT: loopback: error flag set on a good word
+R5 last stop bit not checked: CAUGHT: framing error: wrong frame error flag
+R6 first of two stop bits not checked: CAUGHT: framing error: wrong frame error flag
+R7 overrun overwrites the old word: CAUGHT: rx(B): valid or data changed before the transfer
+R8 overrun pulse missing: CAUGHT: overrun: 0 pulses instead of 2
+R9 data received MSB first: CAUGHT: loopback: received word differs from the sent word, index 0
+R10 synchronizer resets to 1: CAUGHT: reset: low line at reset release taken for a start bit
+R11 parity bit not accumulated: CAUGHT: loopback: error flag set on a good word
+R12 valid never cleared: CAUGHT: loopback: received a word that was never sent
+R13 frame starts on a low level, not an edge: CAUGHT: after break: wrong data
+
+19 of 19 mutants caught

@@ -1,0 +1,22 @@
+uart: synthesis summary
+
+Part xc7z010clg400-1, Vivado 2023.1, out of context, one clock clk_i, I/O delays 0 ns,
+false path from rxd_i. One run per line, raw reports in build/vivado/<tag>/.
+Command (from the repository root, in cmd after settings64.bat):
+  vivado -mode batch -nolog -nojournal -source scripts/synth_vivado_uart.tcl -tclargs <TOP> <CLK_FREQ_HZ> <BAUD> <DATA_BITS> <PARITY> <STOP_BITS> [<PERIOD_NS>]
+
+RESULT uart_100000000_115200_801_4.5ns: LUT=58 FF=66 BRAM=0 DSP=0 TIMING=MET at 242.2 MHz (WNS 0.372 ns at 4.5 ns), WHS_reg=0.158 ns, ASYNC_REG_FF=2 (expected 2) (part xc7z010clg400-1, Vivado 2023.1)
+RESULT uart_tx_100000000_115200_801_4.5ns: LUT=31 FF=26 BRAM=0 DSP=0 TIMING=MET at 239.9 MHz (WNS 0.332 ns at 4.5 ns), WHS_reg=0.218 ns, ASYNC_REG_FF=0 (expected 0) (part xc7z010clg400-1, Vivado 2023.1)
+RESULT uart_rx_100000000_115200_801_4.0ns: LUT=30 FF=40 BRAM=0 DSP=0 TIMING=MET at 286.8 MHz (WNS 0.513 ns at 4.0 ns), WHS_reg=0.173 ns, ASYNC_REG_FF=2 (expected 2) (part xc7z010clg400-1, Vivado 2023.1)
+RESULT uart_100000000_6250000_812_4.0ns: LUT=46 FF=58 BRAM=0 DSP=0 TIMING=MET at 254.3 MHz (WNS 0.067 ns at 4.0 ns), WHS_reg=0.161 ns, ASYNC_REG_FF=2 (expected 2) (part xc7z010clg400-1, Vivado 2023.1)
+
+Notes:
+- uart and uart_tx at 115200 baud, 8N1 did not meet 4.0 ns (uart WNS -0.005 ns, uart_tx WNS
+  -0.140 ns). They are reported at 4.5 ns, where timing is met. The critical path of uart_tx
+  was not analyzed; tx_ready_o is a combinational function of the counters (GitHub issue).
+- WHS_reg is the hold slack between registers. The hold slack of the ports is an artifact of
+  the out-of-context flow (I/O delays of 0 ns, Route 35-198 and 35-426 warnings).
+- With PARITY=0 the parity accumulator of uart_rx is removed by synthesis (Synth 8-6014).
+- ASYNC_REG_FF is the number of flip-flops with the ASYNC_REG property: 2 for the receiver
+  synchronizer, 0 for the transmitter.
+- Results are valid for these tags only; placement is not monotonic with the period.

@@ -52,6 +52,16 @@ def async_cfgs(width, depth, stages, ratios):
     ]
 
 
+def uart_cfg(baud, data_bits, parity, stop_bits, clk=100_000_000, words=40):
+    return g(CLK_FREQ_HZ=clk, BAUD=baud, DATA_BITS=data_bits, PARITY=parity,
+             STOP_BITS=stop_bits, WORDS=words)
+
+
+def compile_order(ip):
+    """Packages first, then sub-entities, then the top entity (named like the IP)."""
+    return lambda p: (0 if p.stem.endswith("_pkg") else 2 if p.stem == ip else 1, p.name)
+
+
 # Generics of each simulated configuration (SPEC section 9 of each IP).
 CONFIGS = {
     "sync_fifo": [g(WIDTH=1, DEPTH=2), g(WIDTH=8, DEPTH=16), g(WIDTH=32, DEPTH=1024)],
@@ -61,6 +71,19 @@ CONFIGS = {
         + async_cfgs(32, 256, 3, RATIOS_BASE + RATIOS_EXTREME)
         + async_cfgs(16, 32, 4, RATIOS_EQUAL)
     ),
+    # 100 MHz clock: BIT_CLKS 16, 20, 33, 100, then 48 MHz and 868 (115200 baud) for realistic values.
+    "uart": [
+        uart_cfg(6_250_000, 8, 0, 1),
+        uart_cfg(6_250_000, 8, 1, 2),
+        uart_cfg(6_250_000, 5, 0, 1),
+        uart_cfg(5_000_000, 8, 1, 1),
+        uart_cfg(3_030_303, 8, 2, 2),
+        uart_cfg(1_000_000, 7, 1, 2),
+        uart_cfg(1_000_000, 8, 2, 1),
+        uart_cfg(1_000_000, 6, 0, 2),
+        uart_cfg(115_200, 8, 0, 1, clk=48_000_000, words=4),
+        uart_cfg(115_200, 8, 0, 1, words=4),
+    ],
 }
 
 # Illegal parameter values: (generics, text expected in the failure message).
@@ -76,6 +99,16 @@ ILLEGAL = {
         (g(SYNC_STAGES=1), "async_fifo: SYNC_STAGES must be 2 to 4"),
         (g(SYNC_STAGES=5), "async_fifo: SYNC_STAGES must be 2 to 4"),
         (g(WIDTH=2000), "async_fifo: WIDTH must be 1 to 1024"),
+    ],
+    "uart": [
+        (g(BAUD=50_000_000), "uart: BIT_CLKS (CLK_FREQ_HZ / BAUD) must be 16 to 65535"),
+        (g(BAUD=1), "uart: BIT_CLKS (CLK_FREQ_HZ / BAUD) must be 16 to 65535"),
+        (g(BAUD=6_100_000), "uart: rounding error of BIT_CLKS exceeds 2 percent"),
+        (g(CLK_FREQ_HZ=600_000_000), "uart: CLK_FREQ_HZ must be 1 to 500000000"),
+        (g(DATA_BITS=4), "uart: DATA_BITS must be 5 to 8"),
+        (g(DATA_BITS=9), "uart: DATA_BITS must be 5 to 8"),
+        (g(PARITY=3), "uart: PARITY must be 0, 1 or 2"),
+        (g(STOP_BITS=3), "uart: STOP_BITS must be 1 or 2"),
     ],
 }
 
@@ -109,7 +142,7 @@ def main() -> int:
         print("ghdl not found in PATH. Install GHDL and reopen the terminal.")
         return 2
 
-    rtl = sorted(ip_dir.glob("rtl/*.vhd"), key=lambda p: (not p.stem.endswith("_pkg"), p.name))
+    rtl = sorted(ip_dir.glob("rtl/*.vhd"), key=compile_order(ip))
     tb = sorted(ip_dir.glob("tb/*.vhd"))
     work = ROOT / "build" / "ghdl" / ip
     work.mkdir(parents=True, exist_ok=True)
@@ -126,7 +159,7 @@ def main() -> int:
     ok_all = True
 
     for index, gen in enumerate(CONFIGS[ip]):
-        gen = dict(gen, SEED=index + 1) if ip == "async_fifo" else gen
+        gen = dict(gen, SEED=index + 1) if ip in ("async_fifo", "uart") else gen
         res = run(sim_cmd(work, tb_unit, gen), ROOT)
         out = res.stdout + res.stderr
         passed = res.returncode == 0 and "TEST PASSED" in out

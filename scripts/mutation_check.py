@@ -72,6 +72,103 @@ MUTANTS = {
             "",
         ),
     },
+    "uart": {
+        "T1 tx bit one cycle short": (
+            "uart_tx.vhd",
+            "if cnt_q = N - 1 then\n            cnt_q <= 0;",
+            "if cnt_q = N - 2 then\n            cnt_q <= 0;",
+        ),
+        "T2 tx parity bit inverted": (
+            "uart_tx.vhd",
+            "word(DATA_BITS) := parity_bit(tx_data_i, PARITY);",
+            "word(DATA_BITS) := not parity_bit(tx_data_i, PARITY);",
+        ),
+        "T3 tx not ready in the last cycle (gap between frames)": (
+            "uart_tx.vhd",
+            "ready      <= run_q and (not busy_q or last_clk);",
+            "ready      <= run_q and not busy_q;",
+        ),
+        "T4 tx stop bit sent low": (
+            "uart_tx.vhd",
+            "word := (others => '1');",
+            "word := (others => '0');",
+        ),
+        "T5 tx ready during reset": (
+            "uart_tx.vhd",
+            "ready      <= run_q and (not busy_q or last_clk);",
+            "ready      <= (not busy_q or last_clk);",
+        ),
+        "T6 parity polarity swapped (package)": (
+            "uart_pkg.vhd",
+            "if mode = 2 then\n      p := not p;",
+            "if mode = 1 then\n      p := not p;",
+        ),
+        "R1 single sample instead of majority vote": (
+            "uart_rx.vhd",
+            "if (a_q and b_q) = '1' or (a_q and line_s) = '1' or (b_q and line_s) = '1' then",
+            "if b_q = '1' then",
+        ),
+        "R2 false start accepted": (
+            "uart_rx.vhd",
+            "if v = '1' then\n                busy_q <= '0';",
+            "if v = '1' then\n                busy_q <= '1';",
+        ),
+        "R3 sampling window a quarter bit early": (
+            "uart_rx.vhd",
+            "cnt_q  <= 1;",
+            "cnt_q  <= 1 + N / 4;",
+        ),
+        "R4 parity error polarity inverted": (
+            "uart_rx.vhd",
+            "perr := acc_q;",
+            "perr := not acc_q;",
+        ),
+        "R5 last stop bit not checked": (
+            "uart_rx.vhd",
+            "ferr   := ferr_q or not v;",
+            "ferr   := ferr_q;",
+        ),
+        "R6 first of two stop bits not checked": (
+            "uart_rx.vhd",
+            "ferr_q <= '1';",
+            "ferr_q <= '0';",
+        ),
+        "R7 overrun overwrites the old word": (
+            "uart_rx.vhd",
+            "if out_valid_q = '0' or rx_ready_i = '1' then",
+            "if true then",
+        ),
+        "R8 overrun pulse missing": (
+            "uart_rx.vhd",
+            "overrun_q <= '1';",
+            "overrun_q <= '0';",
+        ),
+        "R9 data received MSB first": (
+            "uart_rx.vhd",
+            "shift_q <= v & shift_q(DATA_BITS - 1 downto 1);",
+            "shift_q <= shift_q(DATA_BITS - 2 downto 0) & v;",
+        ),
+        "R10 synchronizer resets to 1": (
+            "uart_rx.vhd",
+            'sync_q      <= "00";',
+            'sync_q      <= "11";',
+        ),
+        "R11 parity bit not accumulated": (
+            "uart_rx.vhd",
+            "elsif idx_q <= DATA_BITS + P_LEN then\n              acc_q   <= acc_q xor v;",
+            "elsif idx_q <= DATA_BITS + P_LEN then\n              acc_q   <= acc_q;",
+        ),
+        "R12 valid never cleared": (
+            "uart_rx.vhd",
+            "if out_valid_q = '1' and rx_ready_i = '1' then\n          out_valid_q <= '0';",
+            "if out_valid_q = '1' and rx_ready_i = '1' then\n          out_valid_q <= '1';",
+        ),
+        "R13 frame starts on a low level, not an edge": (
+            "uart_rx.vhd",
+            "if prev_q = '1' and line_s = '0' then",
+            "if line_s = '0' then",
+        ),
+    },
 }
 
 # Testbench runs used to hunt a mutant: first one that fails catches it.
@@ -81,7 +178,18 @@ GENERICS = {
         ["WIDTH=8", "DEPTH=16", "SYNC_STAGES=2", "WR_PS=10000", "RD_PS=7000", "RD_PHASE_PS=1234"],
         ["WIDTH=8", "DEPTH=16", "SYNC_STAGES=2", "WR_PS=7000", "RD_PS=10000", "RD_PHASE_PS=555"],
     ],
+    "uart": [
+        ["BAUD=6250000", "DATA_BITS=8", "PARITY=1", "STOP_BITS=2", "SEED=2"],
+        ["BAUD=3030303", "DATA_BITS=8", "PARITY=2", "STOP_BITS=2", "SEED=5"],
+        ["BAUD=1000000", "DATA_BITS=8", "PARITY=0", "STOP_BITS=1", "SEED=7"],
+        ["BAUD=5000000", "DATA_BITS=7", "PARITY=1", "STOP_BITS=1", "SEED=4"],
+    ],
 }
+
+
+def compile_order(ip):
+    """Packages first, then sub-entities, then the top entity (named like the IP)."""
+    return lambda p: (0 if p.stem.endswith("_pkg") else 2 if p.stem == ip else 1, p.name)
 
 
 def run(cmd):
@@ -105,7 +213,7 @@ def main() -> int:
         return 2
 
     ip_dir = ROOT / "ip" / ip
-    rtl = sorted(ip_dir.glob("rtl/*.vhd"), key=lambda p: (not p.stem.endswith("_pkg"), p.name))
+    rtl = sorted(ip_dir.glob("rtl/*.vhd"), key=compile_order(ip))
     tb = sorted(ip_dir.glob("tb/*.vhd"))
     tb_unit = f"{ip}_tb"
 

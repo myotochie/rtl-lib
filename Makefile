@@ -1,7 +1,6 @@
 .RECIPEPREFIX = >
 
-VHDL_FILES   := $(shell find ip -path "*/rtl/*" \( -name "*.vhd" -o -name "*.vhdl" \) 2>/dev/null | sort)
-VHDL_ORDERED := $(filter %_pkg.vhd,$(VHDL_FILES)) $(filter-out %_pkg.vhd,$(VHDL_FILES))
+IPS := sync_fifo async_fifo uart
 
 .PHONY: check structure lint sim mutation
 
@@ -10,12 +9,16 @@ check: structure lint
 structure:
 > python3 scripts/check_structure.py
 
+# GHDL finds the compile order itself (-i imports, -m builds the top entity of each IP).
 lint:
-> @if [ -z "$(VHDL_FILES)" ]; then echo "lint: no VHDL files yet"; else mkdir -p build/lint && ghdl -a --std=08 --workdir=build/lint $(VHDL_ORDERED) && echo "lint: VHDL OK"; fi
+> @mkdir -p build/lint
+> @for ip in $(IPS); do \
+>   ghdl -i --std=08 --workdir=build/lint ip/$$ip/rtl/*.vhd && \
+>   ghdl -m --std=08 --workdir=build/lint $$ip || exit 1; \
+> done; echo "lint: VHDL OK"
 
 sim:
-> python3 scripts/run_sim.py sync_fifo
-> python3 scripts/run_sim.py async_fifo
+> @for ip in $(IPS); do python3 scripts/run_sim.py $$ip || exit 1; done
 
 mutation:
-> python3 scripts/mutation_check.py async_fifo
+> @for ip in async_fifo uart; do python3 scripts/mutation_check.py $$ip || exit 1; done

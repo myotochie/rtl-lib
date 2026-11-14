@@ -1,0 +1,49 @@
+uart_rx model: python ip/uart/model/uart_rx_model.py
+
+=== 1. Baud tolerance (max |eps| with 100% correct frames, 25 random phases, back-to-back)
+N, format, vote: eps_fast_tx (+), eps_slow_tx (-)   [eps = tx bit time / rx bit time - 1]
+N=  16 8N1 vote=1: tx slower +5.50%  tx faster -3.75%
+N=  16 8N1 vote=3: tx slower +5.50%  tx faster -3.75%
+N=  16 8E2 vote=1: tx slower +5.00%  tx faster -3.00%
+N=  16 8E2 vote=3: tx slower +5.00%  tx faster -3.00%
+N=  16 5N1 vote=1: tx slower +8.25%  tx faster -5.25%
+N=  16 5N1 vote=3: tx slower +8.25%  tx faster -5.25%
+N=  32 8N1 vote=1: tx slower +5.50%  tx faster -4.00%
+N=  32 8N1 vote=3: tx slower +5.50%  tx faster -4.00%
+N=  32 8E2 vote=1: tx slower +5.00%  tx faster -3.25%
+N=  32 8E2 vote=3: tx slower +5.00%  tx faster -3.25%
+N=  32 5N1 vote=1: tx slower +8.25%  tx faster -5.75%
+N=  32 5N1 vote=3: tx slower +8.25%  tx faster -5.75%
+N= 100 8N1 vote=1: tx slower +5.50%  tx faster -4.25%
+N= 100 8N1 vote=3: tx slower +5.50%  tx faster -4.25%
+N= 100 8E2 vote=1: tx slower +5.00%  tx faster -3.50%
+N= 100 8E2 vote=3: tx slower +5.00%  tx faster -3.50%
+N= 100 5N1 vote=1: tx slower +8.25%  tx faster -6.00%
+N= 100 5N1 vote=3: tx slower +8.25%  tx faster -6.00%
+N= 868 8N1 vote=1: tx slower +5.50%  tx faster -4.00%
+N= 868 8N1 vote=3: tx slower +5.50%  tx faster -4.00%
+
+=== 2. Glitch immunity inside a frame (1 glitch of w clocks, 8N1, eps=0): frame error rate
+N=  16 S= 1 w=  1: single=  4.8%  vote3=  0.0%
+N=  16 S= 1 w=  2: single= 11.3%  vote3= 12.7%
+N=  16 S= 1 w=  4: single= 25.2%  vote3= 20.5%
+N=  32 S= 2 w=  1: single=  2.7%  vote3=  0.0%
+N=  32 S= 2 w=  2: single=  6.5%  vote3=  0.0%
+N=  32 S= 2 w=  3: single=  7.7%  vote3=  6.5%
+N=  32 S= 2 w=  4: single= 11.5%  vote3= 10.7%
+N=  32 S= 2 w=  8: single= 23.5%  vote3= 22.7%
+N= 100 S= 6 w=  1: single=  1.7%  vote3=  0.0%
+N= 100 S= 6 w=  6: single=  6.8%  vote3=  0.0%
+N= 100 S= 6 w=  7: single=  5.5%  vote3=  1.8%
+N= 100 S= 6 w= 12: single= 10.8%  vote3= 10.8%
+N= 100 S= 6 w= 25: single= 22.0%  vote3= 23.7%
+
+=== 3. False start: low glitch of w clocks in idle, accepted as a start bit?
+N=  16: shortest accepted glitch single=9 clk, vote3=9 clk (N/2=8, S=1)
+N=  32: shortest accepted glitch single=17 clk, vote3=17 clk (N/2=16, S=2)
+N= 100: shortest accepted glitch single=51 clk, vote3=51 clk (N/2=50, S=6)
+
+=== 4. 1-clock glitch in idle d clocks before a real frame: frame still correct?
+N=  16 S=1: failing d (clocks before start edge) = [9]..[9] count=1
+N=  32 S=2: failing d (clocks before start edge) = [17]..[18] count=2
+N= 100 S=6: failing d (clocks before start edge) = [51]..[56] count=6

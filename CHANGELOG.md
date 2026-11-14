@@ -5,6 +5,24 @@ All notable changes to this repository are listed here. The format follows
 
 ## [Unreleased]
 
+## [0.4.0] - 2026-11-14
+
+### Added
+- `uart`: UART transmitter, receiver and top level (`uart_tx`, `uart_rx`, `uart`), VHDL,
+  valid/ready streams, 5 to 8 data bits, parity none/even/odd, 1 or 2 stop bits.
+- Receiver with two-flop synchronizer and majority vote of three samples; parity, framing
+  and overrun flags.
+- Self-checking testbench with loopback, line-timing monitor, fault injection (baud
+  mismatch, parity and framing errors, break, glitches, false start, overrun, reset).
+- 19 mutants (`scripts/mutation_check.py uart`), 10 simulated configurations, 8 negative
+  parameter tests.
+- Clock-level model of the receiver (`ip/uart/model/uart_rx_model.py`).
+- Vivado script `scripts/synth_vivado_uart.tcl` and measured results.
+
+### Changed
+- `scripts/run_sim.py` and `scripts/mutation_check.py`: compile order puts the top entity last.
+- `Makefile`: `lint` lets GHDL find the compile order, `sim` and `mutation` loop over the IPs.
+
 ## [0.3.0] - 2026-11-02
 
 ### Added

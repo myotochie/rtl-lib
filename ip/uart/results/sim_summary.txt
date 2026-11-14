@@ -1,0 +1,53 @@
+uart: simulation summary
+
+Command: python scripts/run_sim.py uart
+
+CLK_FREQ_HZ=100000000 BAUD=6250000 DATA_BITS=8 PARITY=0 STOP_BITS=1 WORDS=40 SEED=1: PASS
+    coverage: loopback_words=83 back_to_back=74 after_idle=8 mismatch_words=36 parity_err=0 framing_err=3 break=2 glitch=54 false_start=4 sample_pos=8 overrun=1 reset=3
+    transfers: BIT_CLKS=16 tx_frames=83 rx_words_B=116
+
+CLK_FREQ_HZ=100000000 BAUD=6250000 DATA_BITS=8 PARITY=1 STOP_BITS=2 WORDS=40 SEED=2: PASS
+    coverage: loopback_words=83 back_to_back=69 after_idle=13 mismatch_words=36 parity_err=4 framing_err=6 break=2 glitch=54 false_start=4 sample_pos=8 overrun=1 reset=3
+    transfers: BIT_CLKS=16 tx_frames=83 rx_words_B=130
+
+CLK_FREQ_HZ=100000000 BAUD=6250000 DATA_BITS=5 PARITY=0 STOP_BITS=1 WORDS=40 SEED=3: PASS
+    coverage: loopback_words=83 back_to_back=74 after_idle=8 mismatch_words=36 parity_err=0 framing_err=3 break=2 glitch=54 false_start=4 sample_pos=8 overrun=1 reset=3
+    transfers: BIT_CLKS=16 tx_frames=83 rx_words_B=116
+
+CLK_FREQ_HZ=100000000 BAUD=5000000 DATA_BITS=8 PARITY=1 STOP_BITS=1 WORDS=40 SEED=4: PASS
+    coverage: loopback_words=83 back_to_back=73 after_idle=9 mismatch_words=36 parity_err=4 framing_err=3 break=2 glitch=54 false_start=4 sample_pos=8 overrun=1 reset=3
+    transfers: BIT_CLKS=20 tx_frames=83 rx_words_B=124
+
+CLK_FREQ_HZ=100000000 BAUD=3030303 DATA_BITS=8 PARITY=2 STOP_BITS=2 WORDS=40 SEED=5: PASS
+    coverage: loopback_words=83 back_to_back=72 after_idle=10 mismatch_words=36 parity_err=4 framing_err=6 break=2 glitch=54 false_start=4 sample_pos=8 overrun=1 reset=3
+    transfers: BIT_CLKS=33 tx_frames=83 rx_words_B=130
+
+CLK_FREQ_HZ=100000000 BAUD=1000000 DATA_BITS=7 PARITY=1 STOP_BITS=2 WORDS=40 SEED=6: PASS
+    coverage: loopback_words=83 back_to_back=74 after_idle=8 mismatch_words=36 parity_err=4 framing_err=6 break=2 glitch=54 false_start=4 sample_pos=8 overrun=1 reset=3
+    transfers: BIT_CLKS=100 tx_frames=83 rx_words_B=130
+
+CLK_FREQ_HZ=100000000 BAUD=1000000 DATA_BITS=8 PARITY=2 STOP_BITS=1 WORDS=40 SEED=7: PASS
+    coverage: loopback_words=83 back_to_back=72 after_idle=10 mismatch_words=36 parity_err=4 framing_err=3 break=2 glitch=54 false_start=4 sample_pos=8 overrun=1 reset=3
+    transfers: BIT_CLKS=100 tx_frames=83 rx_words_B=124
+
+CLK_FREQ_HZ=100000000 BAUD=1000000 DATA_BITS=6 PARITY=0 STOP_BITS=2 WORDS=40 SEED=8: PASS
+    coverage: loopback_words=83 back_to_back=69 after_idle=13 mismatch_words=36 parity_err=0 framing_err=6 break=2 glitch=54 false_start=4 sample_pos=8 overrun=1 reset=3
+    transfers: BIT_CLKS=100 tx_frames=83 rx_words_B=122
+
+CLK_FREQ_HZ=48000000 BAUD=115200 DATA_BITS=8 PARITY=0 STOP_BITS=1 WORDS=4 SEED=9: PASS
+    coverage: loopback_words=11 back_to_back=6 after_idle=4 mismatch_words=36 parity_err=0 framing_err=3 break=2 glitch=54 false_start=4 sample_pos=8 overrun=1 reset=3
+    transfers: BIT_CLKS=417 tx_frames=11 rx_words_B=116
+
+CLK_FREQ_HZ=100000000 BAUD=115200 DATA_BITS=8 PARITY=0 STOP_BITS=1 WORDS=4 SEED=10: PASS
+    coverage: loopback_words=11 back_to_back=6 after_idle=4 mismatch_words=36 parity_err=0 framing_err=3 break=2 glitch=54 false_start=4 sample_pos=8 overrun=1 reset=3
+    transfers: BIT_CLKS=868 tx_frames=11 rx_words_B=116
+
+Illegal parameters (the run must fail with the expected message):
+  BAUD=50000000: REJECTED
+  BAUD=1: REJECTED
+  BAUD=6100000: REJECTED
+  CLK_FREQ_HZ=600000000: REJECTED
+  DATA_BITS=4: REJECTED
+  DATA_BITS=9: REJECTED
+  PARITY=3: REJECTED
+  STOP_BITS=3: REJECTED
