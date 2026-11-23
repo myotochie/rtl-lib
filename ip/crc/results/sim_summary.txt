@@ -1,0 +1,132 @@
+crc: simulation summary
+
+Command: python scripts/run_sim.py crc
+
+CRC_WIDTH=3 DATA_WIDTH=8 POLY=3 INIT=0 XOROUT=7 REFIN=false REFOUT=false CHECK=4 MESSAGES=30 SEED=1: PASS
+    coverage: messages=30 start_first=6 clear=6 clear_with_valid=6 reset=7 junk_start_idle=116 gaps=87
+
+CRC_WIDTH=3 DATA_WIDTH=1 POLY=3 INIT=0 XOROUT=7 REFIN=false REFOUT=false CHECK=4 MESSAGES=30 SEED=2: PASS
+    coverage: messages=30 start_first=6 clear=6 clear_with_valid=6 reset=7 junk_start_idle=104 gaps=75
+
+CRC_WIDTH=5 DATA_WIDTH=8 POLY=05 INIT=1F XOROUT=1F REFIN=true REFOUT=true CHECK=19 MESSAGES=30 SEED=3: PASS
+    coverage: messages=30 start_first=6 clear=6 clear_with_valid=6 reset=7 junk_start_idle=100 gaps=72
+
+CRC_WIDTH=5 DATA_WIDTH=5 POLY=05 INIT=1F XOROUT=1F REFIN=true REFOUT=true CHECK=19 MESSAGES=30 SEED=4: PASS
+    coverage: messages=30 start_first=6 clear=6 clear_with_valid=6 reset=7 junk_start_idle=116 gaps=89
+
+CRC_WIDTH=8 DATA_WIDTH=8 POLY=07 INIT=00 XOROUT=00 REFIN=false REFOUT=false CHECK=F4 MESSAGES=30 SEED=5: PASS
+    coverage: messages=30 start_first=6 clear=6 clear_with_valid=6 reset=7 junk_start_idle=85 gaps=65
+
+CRC_WIDTH=8 DATA_WIDTH=12 POLY=07 INIT=00 XOROUT=00 REFIN=false REFOUT=false CHECK=F4 MESSAGES=30 SEED=6: PASS
+    coverage: messages=30 start_first=6 clear=6 clear_with_valid=6 reset=7 junk_start_idle=120 gaps=97
+
+CRC_WIDTH=8 DATA_WIDTH=8 POLY=31 INIT=00 XOROUT=00 REFIN=true REFOUT=true CHECK=A1 MESSAGES=30 SEED=7: PASS
+    coverage: messages=30 start_first=6 clear=6 clear_with_valid=6 reset=7 junk_start_idle=120 gaps=77
+
+CRC_WIDTH=8 DATA_WIDTH=16 POLY=31 INIT=00 XOROUT=00 REFIN=true REFOUT=true CHECK=A1 MESSAGES=30 SEED=8: PASS
+    coverage: messages=30 start_first=6 clear=6 clear_with_valid=6 reset=7 junk_start_idle=114 gaps=81
+
+CRC_WIDTH=16 DATA_WIDTH=8 POLY=1021 INIT=FFFF XOROUT=0000 REFIN=false REFOUT=false CHECK=29B1 MESSAGES=30 SEED=9: PASS
+    coverage: messages=30 start_first=6 clear=6 clear_with_valid=6 reset=7 junk_start_idle=112 gaps=74
+
+CRC_WIDTH=16 DATA_WIDTH=24 POLY=1021 INIT=FFFF XOROUT=0000 REFIN=false REFOUT=false CHECK=29B1 MESSAGES=30 SEED=10: PASS
+    coverage: messages=30 start_first=6 clear=6 clear_with_valid=6 reset=7 junk_start_idle=111 gaps=91
+
+CRC_WIDTH=16 DATA_WIDTH=8 POLY=1021 INIT=0000 XOROUT=0000 REFIN=false REFOUT=false CHECK=31C3 MESSAGES=30 SEED=11: PASS
+    coverage: messages=30 start_first=6 clear=6 clear_with_valid=6 reset=7 junk_start_idle=110 gaps=75
+
+CRC_WIDTH=16 DATA_WIDTH=32 POLY=1021 INIT=0000 XOROUT=0000 REFIN=false REFOUT=false CHECK=31C3 MESSAGES=30 SEED=12: PASS
+    coverage: messages=30 start_first=6 clear=6 clear_with_valid=6 reset=7 junk_start_idle=127 gaps=80
+
+CRC_WIDTH=16 DATA_WIDTH=8 POLY=8005 INIT=0000 XOROUT=0000 REFIN=true REFOUT=true CHECK=BB3D MESSAGES=30 SEED=13: PASS
+    coverage: messages=30 start_first=6 clear=6 clear_with_valid=6 reset=7 junk_start_idle=120 gaps=91
+
+CRC_WIDTH=16 DATA_WIDTH=64 POLY=8005 INIT=0000 XOROUT=0000 REFIN=true REFOUT=true CHECK=BB3D MESSAGES=30 SEED=14: PASS
+    coverage: messages=30 start_first=6 clear=6 clear_with_valid=6 reset=7 junk_start_idle=102 gaps=70
+
+CRC_WIDTH=16 DATA_WIDTH=8 POLY=8005 INIT=FFFF XOROUT=0000 REFIN=true REFOUT=true CHECK=4B37 MESSAGES=30 SEED=15: PASS
+    coverage: messages=30 start_first=6 clear=6 clear_with_valid=6 reset=7 junk_start_idle=116 gaps=76
+
+CRC_WIDTH=16 DATA_WIDTH=1 POLY=8005 INIT=FFFF XOROUT=0000 REFIN=true REFOUT=true CHECK=4B37 MESSAGES=30 SEED=16: PASS
+    coverage: messages=30 start_first=6 clear=6 clear_with_valid=6 reset=7 junk_start_idle=113 gaps=80
+
+CRC_WIDTH=16 DATA_WIDTH=8 POLY=1021 INIT=0000 XOROUT=0000 REFIN=true REFOUT=true CHECK=2189 MESSAGES=30 SEED=17: PASS
+    coverage: messages=30 start_first=6 clear=6 clear_with_valid=6 reset=7 junk_start_idle=98 gaps=75
+
+CRC_WIDTH=16 DATA_WIDTH=5 POLY=1021 INIT=0000 XOROUT=0000 REFIN=true REFOUT=true CHECK=2189 MESSAGES=30 SEED=18: PASS
+    coverage: messages=30 start_first=6 clear=6 clear_with_valid=6 reset=7 junk_start_idle=112 gaps=87
+
+CRC_WIDTH=24 DATA_WIDTH=8 POLY=864CFB INIT=B704CE XOROUT=000000 REFIN=false REFOUT=false CHECK=21CF02 MESSAGES=30 SEED=19: PASS
+    coverage: messages=30 start_first=6 clear=6 clear_with_valid=6 reset=7 junk_start_idle=105 gaps=71
+
+CRC_WIDTH=24 DATA_WIDTH=12 POLY=864CFB INIT=B704CE XOROUT=000000 REFIN=false REFOUT=false CHECK=21CF02 MESSAGES=30 SEED=20: PASS
+    coverage: messages=30 start_first=6 clear=6 clear_with_valid=6 reset=7 junk_start_idle=125 gaps=79
+
+CRC_WIDTH=32 DATA_WIDTH=8 POLY=04C11DB7 INIT=FFFFFFFF XOROUT=FFFFFFFF REFIN=true REFOUT=true CHECK=CBF43926 MESSAGES=30 SEED=21: PASS
+    coverage: messages=30 start_first=6 clear=6 clear_with_valid=6 reset=7 junk_start_idle=109 gaps=63
+
+CRC_WIDTH=32 DATA_WIDTH=16 POLY=04C11DB7 INIT=FFFFFFFF XOROUT=FFFFFFFF REFIN=true REFOUT=true CHECK=CBF43926 MESSAGES=30 SEED=22: PASS
+    coverage: messages=30 start_first=6 clear=6 clear_with_valid=6 reset=7 junk_start_idle=103 gaps=70
+
+CRC_WIDTH=32 DATA_WIDTH=8 POLY=1EDC6F41 INIT=FFFFFFFF XOROUT=FFFFFFFF REFIN=true REFOUT=true CHECK=E3069283 MESSAGES=30 SEED=23: PASS
+    coverage: messages=30 start_first=6 clear=6 clear_with_valid=6 reset=7 junk_start_idle=113 gaps=90
+
+CRC_WIDTH=32 DATA_WIDTH=24 POLY=1EDC6F41 INIT=FFFFFFFF XOROUT=FFFFFFFF REFIN=true REFOUT=true CHECK=E3069283 MESSAGES=30 SEED=24: PASS
+    coverage: messages=30 start_first=6 clear=6 clear_with_valid=6 reset=7 junk_start_idle=115 gaps=89
+
+CRC_WIDTH=32 DATA_WIDTH=8 POLY=04C11DB7 INIT=FFFFFFFF XOROUT=00000000 REFIN=false REFOUT=false CHECK=0376E6E7 MESSAGES=30 SEED=25: PASS
+    coverage: messages=30 start_first=6 clear=6 clear_with_valid=6 reset=7 junk_start_idle=137 gaps=92
+
+CRC_WIDTH=32 DATA_WIDTH=32 POLY=04C11DB7 INIT=FFFFFFFF XOROUT=00000000 REFIN=false REFOUT=false CHECK=0376E6E7 MESSAGES=30 SEED=26: PASS
+    coverage: messages=30 start_first=6 clear=6 clear_with_valid=6 reset=7 junk_start_idle=94 gaps=67
+
+CRC_WIDTH=32 DATA_WIDTH=8 POLY=04C11DB7 INIT=FFFFFFFF XOROUT=FFFFFFFF REFIN=false REFOUT=false CHECK=FC891918 MESSAGES=30 SEED=27: PASS
+    coverage: messages=30 start_first=6 clear=6 clear_with_valid=6 reset=7 junk_start_idle=103 gaps=69
+
+CRC_WIDTH=32 DATA_WIDTH=64 POLY=04C11DB7 INIT=FFFFFFFF XOROUT=FFFFFFFF REFIN=false REFOUT=false CHECK=FC891918 MESSAGES=30 SEED=28: PASS
+    coverage: messages=30 start_first=6 clear=6 clear_with_valid=6 reset=7 junk_start_idle=101 gaps=73
+
+CRC_WIDTH=64 DATA_WIDTH=8 POLY=42F0E1EBA9EA3693 INIT=0000000000000000 XOROUT=0000000000000000 REFIN=false REFOUT=false CHECK=6C40DF5F0B497347 MESSAGES=30 SEED=29: PASS
+    coverage: messages=30 start_first=6 clear=6 clear_with_valid=6 reset=7 junk_start_idle=128 gaps=86
+
+CRC_WIDTH=64 DATA_WIDTH=1 POLY=42F0E1EBA9EA3693 INIT=0000000000000000 XOROUT=0000000000000000 REFIN=false REFOUT=false CHECK=6C40DF5F0B497347 MESSAGES=30 SEED=30: PASS
+    coverage: messages=30 start_first=6 clear=6 clear_with_valid=6 reset=7 junk_start_idle=81 gaps=59
+
+CRC_WIDTH=64 DATA_WIDTH=8 POLY=42F0E1EBA9EA3693 INIT=FFFFFFFFFFFFFFFF XOROUT=FFFFFFFFFFFFFFFF REFIN=true REFOUT=true CHECK=995DC9BBDF1939FA MESSAGES=30 SEED=31: PASS
+    coverage: messages=30 start_first=6 clear=6 clear_with_valid=6 reset=7 junk_start_idle=108 gaps=77
+
+CRC_WIDTH=64 DATA_WIDTH=5 POLY=42F0E1EBA9EA3693 INIT=FFFFFFFFFFFFFFFF XOROUT=FFFFFFFFFFFFFFFF REFIN=true REFOUT=true CHECK=995DC9BBDF1939FA MESSAGES=30 SEED=32: PASS
+    coverage: messages=30 start_first=6 clear=6 clear_with_valid=6 reset=7 junk_start_idle=110 gaps=72
+
+CRC_WIDTH=32 DATA_WIDTH=1 POLY=04C11DB7 INIT=FFFFFFFF XOROUT=FFFFFFFF REFIN=true REFOUT=true CHECK=CBF43926 MESSAGES=30 SEED=33: PASS
+    coverage: messages=30 start_first=6 clear=6 clear_with_valid=6 reset=7 junk_start_idle=115 gaps=90
+
+CRC_WIDTH=32 DATA_WIDTH=5 POLY=04C11DB7 INIT=FFFFFFFF XOROUT=FFFFFFFF REFIN=true REFOUT=true CHECK=CBF43926 MESSAGES=30 SEED=34: PASS
+    coverage: messages=30 start_first=6 clear=6 clear_with_valid=6 reset=7 junk_start_idle=117 gaps=85
+
+CRC_WIDTH=32 DATA_WIDTH=16 POLY=04C11DB7 INIT=FFFFFFFF XOROUT=FFFFFFFF REFIN=true REFOUT=true CHECK=CBF43926 MESSAGES=30 SEED=35: PASS
+    coverage: messages=30 start_first=6 clear=6 clear_with_valid=6 reset=7 junk_start_idle=96 gaps=70
+
+CRC_WIDTH=32 DATA_WIDTH=32 POLY=04C11DB7 INIT=FFFFFFFF XOROUT=FFFFFFFF REFIN=true REFOUT=true CHECK=CBF43926 MESSAGES=30 SEED=36: PASS
+    coverage: messages=30 start_first=6 clear=6 clear_with_valid=6 reset=7 junk_start_idle=137 gaps=83
+
+CRC_WIDTH=32 DATA_WIDTH=64 POLY=04C11DB7 INIT=FFFFFFFF XOROUT=FFFFFFFF REFIN=true REFOUT=true CHECK=CBF43926 MESSAGES=30 SEED=37: PASS
+    coverage: messages=30 start_first=6 clear=6 clear_with_valid=6 reset=7 junk_start_idle=99 gaps=77
+
+CRC_WIDTH=32 DATA_WIDTH=8 POLY=04c11db7 INIT=ffffffff XOROUT=ffffffff REFIN=true REFOUT=true CHECK=cbf43926 MESSAGES=30 SEED=38: PASS
+    coverage: messages=30 start_first=6 clear=6 clear_with_valid=6 reset=7 junk_start_idle=109 gaps=76
+
+CRC_WIDTH=16 DATA_WIDTH=12 POLY=1021 INIT=FFFF XOROUT=0000 REFIN=false REFOUT=false CHECK=29B1 MESSAGES=60 SEED=39: PASS
+    coverage: messages=60 start_first=12 clear=12 clear_with_valid=12 reset=13 junk_start_idle=241 gaps=149
+
+Illegal parameters (the run must fail with the expected message):
+  CRC_WIDTH=2: REJECTED
+  CRC_WIDTH=65: REJECTED
+  DATA_WIDTH=65: REJECTED
+  DATA_WIDTH=0: REJECTED
+  POLY=04C11DBG: REJECTED
+  XOROUT=xyz: REJECTED
+  POLY=104C11DB7: REJECTED
+  INIT=1FFFFFFFF: REJECTED
+  XOROUT=1FFFFFFFF: REJECTED
+  POLY=04C11DB6: REJECTED

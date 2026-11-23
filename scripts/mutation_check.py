@@ -72,6 +72,98 @@ MUTANTS = {
             "",
         ),
     },
+    "crc": {
+        "C1 refin: bit order not swapped": (
+            "crc_pkg.vhd",
+            "        b := d(i);\n",
+            "        b := d(d'high - i);\n",
+        ),
+        "C2 polynomial applied when feedback is 0": (
+            "crc_pkg.vhd",
+            "if fb = '1' then",
+            "if fb = '0' then",
+        ),
+        "C3 data bit left out of the feedback": (
+            "crc_pkg.vhd",
+            "fb := c(c'high) xor b;",
+            "fb := c(c'high);",
+        ),
+        "C4 output not reflected": (
+            "crc_pkg.vhd",
+            "      c := reverse(c);",
+            "      null;",
+        ),
+        "C5 xorout ignored": (
+            "crc_pkg.vhd",
+            "return c xor x;",
+            "return c;",
+        ),
+        "C6 last bit of the word skipped": (
+            "crc_pkg.vhd",
+            "for i in 0 to d'length - 1 loop",
+            "for i in 0 to d'length - 2 loop",
+        ),
+        "C7 reverse is the identity": (
+            "crc_pkg.vhd",
+            "r(i) := n(n'high - i);",
+            "r(i) := n(i);",
+        ),
+        "C8 hex digit A to F off by one": (
+            "crc_pkg.vhd",
+            "character'pos(c) - character'pos('A') + 10;",
+            "character'pos(c) - character'pos('A') + 11;",
+        ),
+        "C9 hex digit a to f off by one": (
+            "crc_pkg.vhd",
+            "character'pos(c) - character'pos('a') + 10;",
+            "character'pos(c) - character'pos('a') + 9;",
+        ),
+        "C10 start_i ignored": (
+            "crc.vhd",
+            "if start_i = '1' then",
+            "if false then",
+        ),
+        "C11 start_i loads zero instead of INIT": (
+            "crc.vhd",
+            "base := INIT_V;",
+            "base := (others => '0');",
+        ),
+        "C12 reset value is zero": (
+            "crc.vhd",
+            "          state <= INIT_V;\n        elsif",
+            "          state <= (others => '0');\n        elsif",
+        ),
+        "C13 clear_i ignored": (
+            "crc.vhd",
+            "if rst_n_i = '0' or clear_i = '1' then",
+            "if rst_n_i = '0' then",
+        ),
+        "C14 reset ignored": (
+            "crc.vhd",
+            "if rst_n_i = '0' or clear_i = '1' then",
+            "if clear_i = '1' then",
+        ),
+        "C15 valid_i ignored": (
+            "crc.vhd",
+            "elsif valid_i = '1' then",
+            "else",
+        ),
+        "C16 start_i alone updates the register": (
+            "crc.vhd",
+            "elsif valid_i = '1' then",
+            "elsif valid_i = '1' or start_i = '1' then",
+        ),
+        "C17 valid_i wins over clear_i": (
+            "crc.vhd",
+            "if rst_n_i = '0' or clear_i = '1' then",
+            "if rst_n_i = '0' or (clear_i = '1' and valid_i = '0') then",
+        ),
+        "C18 output reflection inverted": (
+            "crc.vhd",
+            "crc_final(state, XOROUT_V, REFOUT)",
+            "crc_final(state, XOROUT_V, not REFOUT)",
+        ),
+    },
     "uart": {
         "T1 tx bit one cycle short": (
             "uart_tx.vhd",
@@ -177,6 +269,20 @@ GENERICS = {
         ["WIDTH=8", "DEPTH=16", "SYNC_STAGES=2", "WR_PS=10000", "RD_PS=10000", "RD_PHASE_PS=3000"],
         ["WIDTH=8", "DEPTH=16", "SYNC_STAGES=2", "WR_PS=10000", "RD_PS=7000", "RD_PHASE_PS=1234"],
         ["WIDTH=8", "DEPTH=16", "SYNC_STAGES=2", "WR_PS=7000", "RD_PS=10000", "RD_PHASE_PS=555"],
+    ],
+    "crc": [
+        ["CRC_WIDTH=32", "DATA_WIDTH=8", "POLY=04c11db7", "INIT=ffffffff", "XOROUT=ffffffff",
+         "REFIN=true", "REFOUT=true", "CHECK=cbf43926", "MESSAGES=40"],
+        ["CRC_WIDTH=16", "DATA_WIDTH=16", "POLY=1021", "INIT=FFFF", "XOROUT=0000",
+         "REFIN=false", "REFOUT=false", "CHECK=29B1", "MESSAGES=40"],
+        ["CRC_WIDTH=8", "DATA_WIDTH=5", "POLY=31", "INIT=00", "XOROUT=00",
+         "REFIN=true", "REFOUT=true", "CHECK=A1", "MESSAGES=40"],
+        ["CRC_WIDTH=32", "DATA_WIDTH=32", "POLY=04C11DB7", "INIT=FFFFFFFF", "XOROUT=FFFFFFFF",
+         "REFIN=false", "REFOUT=true", "MESSAGES=40"],
+        ["CRC_WIDTH=5", "DATA_WIDTH=1", "POLY=05", "INIT=1F", "XOROUT=1F",
+         "REFIN=true", "REFOUT=false", "CHECK=19", "MESSAGES=40"],
+        ["CRC_WIDTH=64", "DATA_WIDTH=64", "POLY=42F0E1EBA9EA3693", "INIT=FFFFFFFFFFFFFFFF",
+         "XOROUT=FFFFFFFFFFFFFFFF", "REFIN=true", "REFOUT=true", "MESSAGES=40"],
     ],
     "uart": [
         ["BAUD=6250000", "DATA_BITS=8", "PARITY=1", "STOP_BITS=2", "SEED=2"],

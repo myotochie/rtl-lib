@@ -1,0 +1,24 @@
+crc: mutation check
+
+Command: python scripts/mutation_check.py crc
+
+C1 refin: bit order not swapped: CAUGHT: crc: crc_o differs from the cycle model
+C2 polynomial applied when feedback is 0: CAUGHT: crc: crc_o differs from the cycle model
+C3 data bit left out of the feedback: CAUGHT: crc: crc_o differs from the cycle model
+C4 output not reflected: CAUGHT: crc: crc_o differs from the cycle model
+C5 xorout ignored: CAUGHT: crc: crc_o differs from the cycle model
+C6 last bit of the word skipped: CAUGHT: crc: crc_o differs from the cycle model
+C7 reverse is the identity: CAUGHT: crc: crc_o differs from the cycle model
+C8 hex digit A to F off by one: CAUGHT: crc: check value of 123456789 differs from the reference
+C9 hex digit a to f off by one: CAUGHT: crc: check value of 123456789 differs from the reference
+C10 start_i ignored: CAUGHT: crc: crc_o differs from the cycle model
+C11 start_i loads zero instead of INIT: CAUGHT: crc: crc_o differs from the cycle model
+C12 reset value is zero: CAUGHT: crc: crc_o differs from the cycle model
+C13 clear_i ignored: CAUGHT: crc: crc_o differs from the cycle model
+C14 reset ignored: CAUGHT: crc: crc_o differs from the cycle model
+C15 valid_i ignored: CAUGHT: crc: crc_o differs from the cycle model
+C16 start_i alone updates the register: CAUGHT: crc: crc_o differs from the cycle model
+C17 valid_i wins over clear_i: CAUGHT: crc: crc_o differs from the cycle model
+C18 output reflection inverted: CAUGHT: crc: crc_o differs from the cycle model
+
+18 of 18 mutants caught

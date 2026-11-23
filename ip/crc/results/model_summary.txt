@@ -1,0 +1,29 @@
+crc model: python ip/crc/model/crc_model.py
+
+=== 1. Catalogue check values, message '123456789' (two independent algorithms)
+CRC-3/GSM          check=4 bitwise=4 division=4 OK
+CRC-5/USB          check=19 bitwise=19 division=19 OK
+CRC-8/SMBUS        check=F4 bitwise=F4 division=F4 OK
+CRC-8/MAXIM-DOW    check=A1 bitwise=A1 division=A1 OK
+CRC-16/IBM-3740    check=29B1 bitwise=29B1 division=29B1 OK
+CRC-16/XMODEM      check=31C3 bitwise=31C3 division=31C3 OK
+CRC-16/ARC         check=BB3D bitwise=BB3D division=BB3D OK
+CRC-16/MODBUS      check=4B37 bitwise=4B37 division=4B37 OK
+CRC-16/KERMIT      check=2189 bitwise=2189 division=2189 OK
+CRC-24/OPENPGP     check=21CF02 bitwise=21CF02 division=21CF02 OK
+CRC-32/ISO-HDLC    check=CBF43926 bitwise=CBF43926 division=CBF43926 OK
+CRC-32/ISCSI       check=E3069283 bitwise=E3069283 division=E3069283 OK
+CRC-32/MPEG-2      check=0376E6E7 bitwise=0376E6E7 division=0376E6E7 OK
+CRC-32/BZIP2       check=FC891918 bitwise=FC891918 division=FC891918 OK
+CRC-64/ECMA-182    check=6C40DF5F0B497347 bitwise=6C40DF5F0B497347 division=6C40DF5F0B497347 OK
+CRC-64/XZ          check=995DC9BBDF1939FA bitwise=995DC9BBDF1939FA division=995DC9BBDF1939FA OK
+
+=== 2. Word convention: message sent as DATA_WIDTH-bit words = same message as bytes
+960 word messages, 0 differ from the byte stream -> OK
+
+=== 3. Empty message
+CRC-16/IBM-3740    CRC of the empty message = FFFF (both algorithms agree: True)
+CRC-32/ISO-HDLC    CRC of the empty message = 00000000 (both algorithms agree: True)
+CRC-16/ARC         CRC of the empty message = 0000 (both algorithms agree: True)
+
+ALL OK

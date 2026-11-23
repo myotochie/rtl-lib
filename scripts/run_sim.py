@@ -61,6 +61,31 @@ def compile_order(ip):
     """Packages first, then sub-entities, then the top entity (named like the IP)."""
     return lambda p: (0 if p.stem.endswith("_pkg") else 2 if p.stem == ip else 1, p.name)
 
+def crc_cfgs():
+    """CRC catalogue (ip/crc/model/crc_model.py): every algorithm at two data widths,
+    plus a few extra widths and lower-case hexadecimal strings on CRC-32."""
+    sys.path.insert(0, str(ROOT / "ip" / "crc" / "model"))
+    from crc_model import CATALOGUE
+
+    def cfg(name, dw, messages=30, lower=False):
+        w, poly, init, refin, refout, xorout, check = CATALOGUE[name]
+        h = (w + 3) // 4
+        fmt = f"0{h}x" if lower else f"0{h}X"
+        return g(CRC_WIDTH=w, DATA_WIDTH=dw, POLY=format(poly, fmt), INIT=format(init, fmt),
+                 XOROUT=format(xorout, fmt), REFIN=str(refin).lower(),
+                 REFOUT=str(refout).lower(), CHECK=format(check, fmt), MESSAGES=messages)
+
+    extra = [1, 5, 12, 16, 24, 32, 64]
+    out = []
+    for i, name in enumerate(CATALOGUE):
+        out.append(cfg(name, 8))
+        out.append(cfg(name, extra[i % len(extra)]))
+    for dw in (1, 5, 16, 32, 64):
+        out.append(cfg("CRC-32/ISO-HDLC", dw))
+    out.append(cfg("CRC-32/ISO-HDLC", 8, lower=True))
+    out.append(cfg("CRC-16/IBM-3740", 12, messages=60))
+    return out
+
 
 # Generics of each simulated configuration (SPEC section 9 of each IP).
 CONFIGS = {
@@ -71,6 +96,7 @@ CONFIGS = {
         + async_cfgs(32, 256, 3, RATIOS_BASE + RATIOS_EXTREME)
         + async_cfgs(16, 32, 4, RATIOS_EQUAL)
     ),
+    "crc": crc_cfgs(),
     # 100 MHz clock: BIT_CLKS 16, 20, 33, 100, then 48 MHz and 868 (115200 baud) for realistic values.
     "uart": [
         uart_cfg(6_250_000, 8, 0, 1),
@@ -99,6 +125,18 @@ ILLEGAL = {
         (g(SYNC_STAGES=1), "async_fifo: SYNC_STAGES must be 2 to 4"),
         (g(SYNC_STAGES=5), "async_fifo: SYNC_STAGES must be 2 to 4"),
         (g(WIDTH=2000), "async_fifo: WIDTH must be 1 to 1024"),
+    ],
+    "crc": [
+        (g(CRC_WIDTH=2), "crc: CRC_WIDTH must be 3 to 64"),
+        (g(CRC_WIDTH=65), "crc: CRC_WIDTH must be 3 to 64"),
+        (g(DATA_WIDTH=65), "crc: DATA_WIDTH must be 1 to 64"),
+        (g(DATA_WIDTH=0), "crc: DATA_WIDTH must be 1 to 64"),
+        (g(POLY="04C11DBG"), "crc: POLY, INIT and XOROUT must be non-empty hexadecimal strings"),
+        (g(XOROUT="xyz"), "crc: POLY, INIT and XOROUT must be non-empty hexadecimal strings"),
+        (g(POLY="104C11DB7"), "crc: POLY does not fit in CRC_WIDTH bits"),
+        (g(INIT="1FFFFFFFF"), "crc: INIT does not fit in CRC_WIDTH bits"),
+        (g(XOROUT="1FFFFFFFF"), "crc: XOROUT does not fit in CRC_WIDTH bits"),
+        (g(POLY="04C11DB6"), "crc: POLY must be odd (the x^0 term must be present)"),
     ],
     "uart": [
         (g(BAUD=50_000_000), "uart: BIT_CLKS (CLK_FREQ_HZ / BAUD) must be 16 to 65535"),
@@ -159,7 +197,7 @@ def main() -> int:
     ok_all = True
 
     for index, gen in enumerate(CONFIGS[ip]):
-        gen = dict(gen, SEED=index + 1) if ip in ("async_fifo", "uart") else gen
+        gen = dict(gen, SEED=index + 1) if ip in ("async_fifo", "uart", "crc") else gen
         res = run(sim_cmd(work, tb_unit, gen), ROOT)
         out = res.stdout + res.stderr
         passed = res.returncode == 0 and "TEST PASSED" in out
